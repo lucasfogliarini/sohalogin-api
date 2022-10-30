@@ -1,11 +1,16 @@
 using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Mvc;
 using SohaLogin.Api;
+using SohaLogin.Database;
+using SohaLogin.Database.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var app = AddServices(builder).Build();
+
+Seed(app);
 
 Run(app);
 
@@ -14,6 +19,8 @@ static WebApplicationBuilder AddServices(WebApplicationBuilder builder)
     // Add services to the container.
 
     builder.Services.AddServices();
+    builder.Services.AddDatabase();
+
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -50,4 +57,19 @@ static void Run(WebApplication app)
     app.MapControllers();
 
     app.Run();
+}
+
+static async void Seed(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
+    var sohaLoginDbContext = scope.ServiceProvider.GetService<SohaLoginDbContext>();
+    var account = new Account
+    {
+        Email = "lucasfogliarini@gmail.com",
+        Password = "pass1",
+        CreatedAt = DateTime.Now
+    };
+
+    sohaLoginDbContext.Add(account);
+    await sohaLoginDbContext.SaveChangesAsync();
 }
