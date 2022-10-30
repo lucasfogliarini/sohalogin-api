@@ -52,6 +52,9 @@ static void Run(WebApplication app)
 
     app.UseHttpsRedirection();
 
+    app.UseProblemDetails();
+
+    app.UseAuthentication();//must be before UseAuthorization
     app.UseAuthorization();
 
     app.MapControllers();
@@ -65,6 +68,7 @@ static async void Seed(WebApplication app)
     var sohaLoginDbContext = scope.ServiceProvider.GetService<SohaLoginDbContext>();
     var account = new Account
     {
+        Name = "Lucas Fogliarini",
         Email = "lucasfogliarini@gmail.com",
         Password = "pass1",
         CreatedAt = DateTime.Now

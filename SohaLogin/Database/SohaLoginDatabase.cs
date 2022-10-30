@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SohaLogin.Database;
 using SohaLogin.Database.Entities;
 using System.ComponentModel.DataAnnotations;
 

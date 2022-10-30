@@ -46,7 +46,7 @@ namespace SohaLogin.Api
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Name, name)
                 }),
-                Expires = DateTime.Now.AddMinutes(15),
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(GetSymmetricSecurityKey(SecurityKey), SecurityAlgorithms.HmacSha256Signature)
             };
 

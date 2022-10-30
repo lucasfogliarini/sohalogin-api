@@ -1,10 +1,8 @@
-﻿using Divagando.Accounts;
-using Divagando.Database;
-using Divagando.Database.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using SohaLogin.Accounts;
 
-namespace Divagando.Api.Controllers
+namespace SohaLogin.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -15,33 +13,24 @@ namespace Divagando.Api.Controllers
 
         public TokenController(IAccountService accountService, IOptions<Jwt> jwt)
         {
-            _divagandoDatabase = divagandoDatabase;
             _accountService = accountService;
             _jwt = jwt.Value;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Token(AuthenticationInput authenticationInput)
+        public IActionResult Token(AccountInput accountInput)
         {
-            await _accountService.CreateOrUpdateAsync(authenticationInput);
-            var authentication = await CreateAuthenticationAsync(authenticationInput);
-            return Ok(authentication);
-        }
+            var accountOut = _accountService.Login(accountInput.Email, accountInput.Password);
+            var tokenDescriptor = _jwt.CreateTokenDescriptor(accountOut.Email, accountOut.Name);
 
-        private async Task<Authentication> CreateAuthenticationAsync(AuthenticationInput authenticationInput)
-        {
-            var tokenDescriptor = _jwt.CreateTokenDescriptor(authenticationInput.Email, authenticationInput.Name);
-
-            var authentication = new Authentication
+            var authentication = new 
             {
-                Email = authenticationInput.Email,
+                Email = accountOut.Email,
                 JwToken = _jwt.GenerateToken(tokenDescriptor),
-                CreatedAt = DateTime.Now,
                 ExpiresAt = tokenDescriptor.Expires.GetValueOrDefault(),
             };
-            _divagandoDatabase.Add(authentication);
-            await _divagandoDatabase.CommitAsync();
-            return authentication;
+
+            return Ok(authentication);
         }
     }
 }

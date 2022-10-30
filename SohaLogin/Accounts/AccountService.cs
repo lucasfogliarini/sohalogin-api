@@ -1,4 +1,5 @@
 ﻿using SohaLogin.Database;
+using SohaLogin.Database.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace SohaLogin.Accounts
@@ -12,9 +13,20 @@ namespace SohaLogin.Accounts
             _sohaLoginDatabase = sohaLoginDatabase;
         }
 
-        public void Login(string email, string password)
+        public AccountOuput Login(string email, string password)
         {
             ValidateLogin(email, password);
+
+            var account = _sohaLoginDatabase.Query<Account>().FirstOrDefault(e=>e.Email == email && e.Password == password);
+
+            if (account == null)
+                throw new ValidationException("Credenciais inválidas.");
+
+            return new AccountOuput
+            {
+                Name = account.Name,
+                Email = account.Email
+            };
         }
 
         private void ValidateLogin(string email, string password)

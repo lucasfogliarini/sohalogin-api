@@ -9,6 +9,7 @@ namespace SohaLogin.Database.EntityConfigurations
         public void Configure(EntityTypeBuilder<Account> builder)
         {
             builder.ConfigureEntity();
+            builder.Property(e => e.Name).IsRequired();
             builder.Property(e => e.Email).IsRequired();
             builder.Property(e => e.Password).IsRequired().HasMaxLength(15);
         }
