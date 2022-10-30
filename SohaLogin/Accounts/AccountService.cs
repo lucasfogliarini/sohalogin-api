@@ -46,7 +46,7 @@ namespace SohaLogin.Accounts
         private void ValidatePassword(string password)
         {
             if (password == null || password.Length < 4 || password.Length > 15)
-                throw new ValidationException("A senha deverá ter no mínimo 4 caracteres e no máximo 15");
+                throw new ValidationException("A senha deve ter no mínimo 4 caracteres e no máximo 15");
         }
     }
 }

@@ -50,6 +50,11 @@ static void Run(WebApplication app)
         app.UseSwaggerUI();
     }
 
+    app.UseCors(x => x
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowAnyOrigin());
+
     app.UseHttpsRedirection();
 
     app.UseProblemDetails();

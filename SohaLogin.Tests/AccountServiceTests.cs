@@ -44,12 +44,12 @@ namespace SohaLogin.Tests
         }
 
         //CA05 - A senha deverá ter no mínimo 4 caracteres e no máximo 15
-        [Theory(DisplayName = "A senha deverá ter no mínimo 4 caracteres e no máximo 15")]
+        [Theory(DisplayName = "A senha deve ter no mínimo 4 caracteres e no máximo 15")]
         [InlineData("pas")]
         [InlineData("ThisPasswordHasMoreThan15chars")]
         public void Login_ShouldThrowsException_WhenPasswordIsInvalid(string password)
         {
-            var expectedMessage = "A senha deverá ter no mínimo 4 caracteres e no máximo 15";
+            var expectedMessage = "A senha deve ter no mínimo 4 caracteres e no máximo 15";
             var sohaLoginDatabase = Substitute.For<ISohaLoginDatabase>();
             var accountService = new AccountService(sohaLoginDatabase);
 
