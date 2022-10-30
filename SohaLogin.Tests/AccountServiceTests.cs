@@ -12,7 +12,7 @@ namespace SohaLogin.Tests
         [InlineData(null, null)]
         [InlineData("email1", null)]
         [InlineData("", "password1")]
-        public void Login_(string email, string password)
+        public void Login_ShouldThrowsException_WhenEmailAndPasswordIsEmpty(string email, string password)
         {
             var sohaLoginDatabase = Substitute.For<ISohaLoginDatabase>();
             var accountService = new AccountService(sohaLoginDatabase);
@@ -20,6 +20,22 @@ namespace SohaLogin.Tests
             Assert.Throws<ValidationException>(() =>
             {
                 accountService.Login(email, password);
+            });
+        }
+
+        //CA04 - O usuário deverá ser um e-mail e deverá haver uma validação para caso não seja um e-mail válido
+        [Theory(DisplayName = "E-mail deve ter um formato válido.")]
+        [InlineData(null)]
+        [InlineData("email1")]
+        [InlineData("email1@")]
+        public void Login_ShouldThrowsException_WhenEmailIsInvalid(string email)
+        {
+            var sohaLoginDatabase = Substitute.For<ISohaLoginDatabase>();
+            var accountService = new AccountService(sohaLoginDatabase);
+
+            Assert.Throws<ValidationException>(() =>
+            {
+                accountService.Login(email, "anypassword");
             });
         }
     }
