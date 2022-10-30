@@ -73,9 +73,9 @@ static async void Seed(WebApplication app)
     var sohaLoginDbContext = scope.ServiceProvider.GetService<SohaLoginDbContext>();
     var account = new Account
     {
-        Name = "Lucas Fogliarini",
-        Email = "lucasfogliarini@gmail.com",
-        Password = "pass1",
+        Name = "SOHA",
+        Email = "soha@soha.com",
+        Password = "soha",
         CreatedAt = DateTime.Now
     };
 
